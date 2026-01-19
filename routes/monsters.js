@@ -81,9 +81,14 @@ router.get('/', async (req, res) => {
         const items = monsters.map(monster => ({
             id: monster.id,
             name: monster.name,
+            description: monster.description,
+            elementalType: monster.elementalType,
             _links: {
                 self: {
                     href: `${process.env.APPLICATION_URL}:${process.env.EXPRESS_PORT}/monsters/${monster.id}`
+                },
+                collection: {
+                    href: `${process.env.APPLICATION_URL}:${process.env.EXPRESS_PORT}/monsters`
                 }
             }
         }));
