@@ -1,0 +1,25 @@
+{
+  "name": "monster-hunter-webservice",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/martijnsark/monster-hunter-webservice#readme",
+  "bugs": {
+    "url": "https://github.com/martijnsark/monster-hunter-webservice/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/martijnsark/monster-hunter-webservice.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node --env-file=.env --watch index.js"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^10.2.0",
+    "express": "^5.2.1",
+    "mongoose": "^9.1.4"
+  }
+}
