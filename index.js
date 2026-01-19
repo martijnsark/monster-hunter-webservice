@@ -29,7 +29,7 @@ try {
         res.json({ message: 'Hello! This is my MonsterHunter webservice.' });
     });
 
-    // Spots routes
+    // monster routes
     app.use('/monsters', spotsRouter);
 
     app.listen(process.env.EXPRESS_PORT, () => {
