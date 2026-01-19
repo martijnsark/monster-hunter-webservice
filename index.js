@@ -1,6 +1,6 @@
 import express from 'express';
 import mongoose from "mongoose";
-import spotsRouter from './routes/monsters.js';
+import monsterRouter from './routes/monsters.js';
 
 try {
     const app = express();
@@ -30,7 +30,7 @@ try {
     });
 
     // monster routes
-    app.use('/monsters', spotsRouter);
+    app.use('/monsters', monsterRouter);
 
     app.listen(process.env.EXPRESS_PORT, () => {
         console.log(`The server is running on port ${process.env.EXPRESS_PORT}`);
