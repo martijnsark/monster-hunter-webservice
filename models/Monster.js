@@ -7,6 +7,7 @@ const monsterSchema = new mongoose.Schema(
         description: { type: String, required: true },
         elementalType: { type: String, required: true },
         elementalWeakness: { type: String, required: true },
+        image: { type: String, required: false },
     },
     {
         toJSON: {

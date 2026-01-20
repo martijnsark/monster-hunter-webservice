@@ -7,7 +7,7 @@ const router = express.Router();
 
 
 router.use((req, res, next) => {
-    // Allow any origin (or replace '*' with your frontend URL)
+    // Allow any origin
     res.header('Access-Control-Allow-Origin', '*');
 
     next();
@@ -32,7 +32,7 @@ router.options('/:id', (req, res) => {
 // seed monsters into DB
 router.post('/seed', async (req, res) => {
     try {
-        // wipe spots before seeding
+        // wipe monsters before seeding
         await Monster.deleteMany({});
 
         const createdMonsters = [];
@@ -43,6 +43,7 @@ router.post('/seed', async (req, res) => {
                 description: faker.lorem.sentences(2),
                 elementalType: faker.lorem.sentence(),
                 elementalWeakness: faker.lorem.sentence(),
+                image: faker.image.url(),
             });
 
             createdMonsters.push(newMonster);
@@ -50,7 +51,7 @@ router.post('/seed', async (req, res) => {
 
         res.status(201).json(createdMonsters);
     } catch (e) {
-        res.status(500).json();
+        res.status(400).json();
         console.log(e);
     }
 });
@@ -63,10 +64,11 @@ router.post('/', async (req, res) => {
             description:  req.body.description,
             elementalType:  req.body.elementalType,
             elementalWeakness:  req.body.elementalWeakness,
+            image: req.body.image,
         });
         res.status(201).json(monster);
     } catch (e) {
-        res.status(500).json();
+        res.status(400).json();
         console.log(e);
     }
 });
@@ -83,6 +85,7 @@ router.get('/', async (req, res) => {
             name: monster.name,
             description: monster.description,
             elementalType: monster.elementalType,
+            image: monster.image,
             _links: {
                 self: {
                     href: `${process.env.APPLICATION_URL}:${process.env.EXPRESS_PORT}/monsters/${monster.id}`
@@ -142,8 +145,9 @@ router.put('/:id', async (req, res) => {
         if (req.body.description !== undefined) monster.description = req.body.description;
         if (req.body.elementalType !== undefined) monster.elementalType = req.body.elementalType;
         if (req.body.elementalWeakness !== undefined) monster.elementalWeakness = req.body.elementalWeakness;
+        if (req.body.image !== undefined) monster.image = req.body.image;
 
-        // save the updated spot
+        // save the updated monster
         await monster.save();
 
         res.status(200).json(monster);
