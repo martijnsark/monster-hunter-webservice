@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from "mongoose";
 import monsterRouter from './routes/monsters.js';
+import authRoutes from "./routes/auth.js";
 
 try {
     const app = express();
@@ -31,6 +32,8 @@ try {
 
     // monster routes
     app.use('/monsters', monsterRouter);
+    // auth route for login
+    app.use("/auth", authRoutes);
 
     app.listen(process.env.EXPRESS_PORT, () => {
         console.log(`The server is running on port ${process.env.EXPRESS_PORT}`);

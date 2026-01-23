@@ -1,6 +1,8 @@
 import express from "express";
 import { faker } from '@faker-js/faker';
 import Monster from "../models/Monster.js";
+import jwt from "jsonwebtoken";
+
 
 
 const router = express.Router();
@@ -32,7 +34,25 @@ router.options('/:id', (req, res) => {
 // seed monsters into DB
 router.post('/seed', async (req, res) => {
     try {
-        // wipe monsters before seeding
+        //read the authorization header from request
+        const authHeader = req.headers.authorization;
+
+        //if no auth header or wrong auth header
+        if (!authHeader || !authHeader.startsWith("Bearer")) {
+            return res.status(401).json({ error: "JWT missing" });
+        }
+
+        //removes bearer when token is read
+        const token = authHeader.split(" ")[1];
+
+        try {
+            //verify and save token
+            req.user = jwt.verify(token, process.env.JWT_SECRET);
+        } catch (err) {
+            return res.status(401).json({ error: "Invalid or expired JWT" });
+        }
+
+        //wipe monsters before seeding
         await Monster.deleteMany({});
 
         const createdMonsters = [];
