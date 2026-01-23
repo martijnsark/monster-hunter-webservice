@@ -27,6 +27,7 @@ router.post("/login", (req, res) => {
 
     //check login credentials
     if (username !== USERNAME || password !== PASSWORD) {
+        res.setHeader("WWW-Authenticate", 'Basic realm="Login"');
         return res.status(401).json({ error: "Invalid credentials" });
     }
 

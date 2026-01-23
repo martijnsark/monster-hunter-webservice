@@ -57,7 +57,7 @@ router.post('/seed', async (req, res) => {
 
         const createdMonsters = [];
 
-        for (let i = 0; i < req.body.amount; i++) {
+        for (let i = 0; i < req.body.amount ?? 5; i++) {
             const newMonster = await Monster.create({
                 name: faker.company.catchPhrase(),
                 description: faker.lorem.sentences(2),
