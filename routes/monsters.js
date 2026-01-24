@@ -31,6 +31,13 @@ router.options('/:id', (req, res) => {
     res.sendStatus(204);
 });
 
+router.options('/named/:name', (req, res) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, OPTIONS'); 
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.sendStatus(204);
+});
+
 
 
 // seed monsters into DB
