@@ -19,6 +19,7 @@ router.options('/', (req, res) => {
     res.header('Allow', 'GET, POST, OPTIONS');
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    //204 no content
     res.sendStatus(204);
 });
 
@@ -26,6 +27,7 @@ router.options('/:id', (req, res) => {
     res.header('Allow', 'GET, PUT, DELETE, OPTIONS');
     res.header('Access-Control-Allow-Methods', 'GET, PUT, DELETE, OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    //204 no content
     res.sendStatus(204);
 });
 
@@ -43,6 +45,7 @@ router.post('/seed', async (req, res) => {
                 "WWW-Authenticate",
                 'Bearer realm="access"'
             );
+            //401 unauthorized
             return res.status(401).json({ error: "JWT missing" });
         }
 
@@ -57,6 +60,7 @@ router.post('/seed', async (req, res) => {
                 "WWW-Authenticate",
                 'Bearer realm="access", error="invalid_token"'
             );
+            //401 unauthorized
             return res.status(401).json({ error: "Invalid or expired JWT" });
         }
 
@@ -76,9 +80,10 @@ router.post('/seed', async (req, res) => {
 
             createdMonsters.push(newMonster);
         }
-
+        //201 created
         res.status(201).json(createdMonsters);
     } catch (e) {
+        //400 bad request
         res.status(400).json();
         console.log(e);
     }
@@ -94,8 +99,10 @@ router.post('/', async (req, res) => {
             elementalWeakness:  req.body.elementalWeakness,
             image: req.body.image,
         });
+        //201 created
         res.status(201).json(monster);
     } catch (e) {
+        //400 bad request
         res.status(400).json();
         console.log(e);
     }
@@ -124,6 +131,7 @@ router.get('/', async (req, res) => {
             }
         }));
 
+        //200 oke (success)
         res.status(200).json({
             items,
             _links: {
@@ -136,6 +144,7 @@ router.get('/', async (req, res) => {
             }
         });
     } catch (e) {
+        //500 internal server error
         res.status(500).json();
         console.log(e);
     }
@@ -149,11 +158,14 @@ router.get('/:id', async (req, res) => {
         const monster = await Monster.findById(req.params.id);
 
         if (!monster) {
+            //404 not found
             return res.status(404).json({ message: "Monster not found" });
         }
 
+        //200 oke (success)
         res.status(200).json(monster);
     } catch (e) {
+        //500 internal server error
         res.status(500).json();
         console.log(e);
     }
@@ -165,6 +177,7 @@ router.put('/:id', async (req, res) => {
         const monster = await Monster.findById(req.params.id);
 
         if (!monster) {
+            //404 not found
             return res.status(404).json({ message: "Monster not found" });
         }
 
@@ -178,8 +191,10 @@ router.put('/:id', async (req, res) => {
         // save the updated monster
         await monster.save();
 
+        //200 oke (success)
         res.status(200).json(monster);
     } catch (e) {
+        //500 internal server error
         res.status(500).json();
         console.log(e);
     }
@@ -192,12 +207,15 @@ router.delete('/:id', async (req, res) => {
         const monster = await Monster.findByIdAndDelete(req.params.id);
 
         if (!monster) {
+            //404 not found
             return res.status(404).json({ message: "Monster not found" });
         }
 
+        //204 no content
         return res.status(204).send();
     } catch (e) {
         console.error(e);
+        //500 internal server error
         res.status(500).send();
     }
 });
@@ -214,6 +232,7 @@ router.get('/named/:name', async (req, res) => {
                 "WWW-Authenticate",
                 'Bearer realm="access"'
             );
+            //401 unauthorized
             return res.status(401).json({ error: "JWT missing" });
         }
 
@@ -228,6 +247,7 @@ router.get('/named/:name', async (req, res) => {
                 "WWW-Authenticate",
                 'Bearer realm="access", error="invalid_token"'
             );
+            //401 unauthorized
             return res.status(401).json({ error: "Invalid or expired JWT" });
         }
 
@@ -239,9 +259,11 @@ router.get('/named/:name', async (req, res) => {
         }
 
 
+        //200 oke (success)
         res.status(200).json(monster);
     } catch (e) {
         console.error(e);
+        //500 internal server error
         res.status(500).json({ message: "Server error" });
     }
 });

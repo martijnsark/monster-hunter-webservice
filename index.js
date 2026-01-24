@@ -13,6 +13,7 @@ try {
     // middleware prevent non json request receiving json data
     app.use((req, res, next) => {
         if(req.header('Accept') !== 'application/json' && req.method !== "OPTIONS"){
+            //406 not acceptable
             res.status(406);
             res.json({error: 'only JSON as accept header pretty please'})
             return;

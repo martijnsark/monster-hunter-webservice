@@ -15,7 +15,8 @@ router.post("/login", (req, res) => {
     if (!authHeader || !authHeader.startsWith("Basic ")) {
         //tells the client which auth scheme is required
         res.setHeader("WWW-Authenticate", 'Basic realm="Login"');
-        return res.status(401).json({ error: "Authorization header missing" });
+        //401 unauthorized
+        return res.status(401).json({ error: "Authentication required" });
     }
 
     //removes basic when decoding base64
@@ -28,6 +29,7 @@ router.post("/login", (req, res) => {
     //check login credentials
     if (username !== USERNAME || password !== PASSWORD) {
         res.setHeader("WWW-Authenticate", 'Basic realm="Login"');
+        //401 unauthorized
         return res.status(401).json({ error: "Invalid credentials" });
     }
 
@@ -38,7 +40,7 @@ router.post("/login", (req, res) => {
         { expiresIn: process.env.JWT_EXPIRES_IN }
     );
 
-    //add 200 status
+    //200 oke (success)
     res.status(200).json({ token });
 });
 
