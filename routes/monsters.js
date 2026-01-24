@@ -38,7 +38,11 @@ router.post('/seed', async (req, res) => {
         const authHeader = req.headers.authorization;
 
         //if no auth header or wrong auth header
-        if (!authHeader || !authHeader.startsWith("Bearer")) {
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            res.setHeader(
+                "WWW-Authenticate",
+                'Bearer realm="access"'
+            );
             return res.status(401).json({ error: "JWT missing" });
         }
 
@@ -48,7 +52,11 @@ router.post('/seed', async (req, res) => {
         try {
             //verify and save token
             req.user = jwt.verify(token, process.env.JWT_SECRET);
-        } catch (err) {
+        } catch (e) {
+            res.setHeader(
+                "WWW-Authenticate",
+                'Bearer realm="access", error="invalid_token"'
+            );
             return res.status(401).json({ error: "Invalid or expired JWT" });
         }
 
@@ -191,6 +199,50 @@ router.delete('/:id', async (req, res) => {
     } catch (e) {
         console.error(e);
         res.status(500).send();
+    }
+});
+
+// GET one monster by name
+router.get('/named/:name', async (req, res) => {
+    try {
+        //read the authorization header from request
+        const authHeader = req.headers.authorization;
+
+        //if no auth header or wrong auth header
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            res.setHeader(
+                "WWW-Authenticate",
+                'Bearer realm="access"'
+            );
+            return res.status(401).json({ error: "JWT missing" });
+        }
+
+        //removes bearer when token is read
+        const token = authHeader.split(" ")[1];
+
+        try {
+            //verify and save token
+            req.user = jwt.verify(token, process.env.JWT_SECRET);
+        } catch (e) {
+            res.setHeader(
+                "WWW-Authenticate",
+                'Bearer realm="access", error="invalid_token"'
+            );
+            return res.status(401).json({ error: "Invalid or expired JWT" });
+        }
+
+        const monster = await Monster.findOne({ name: req.params.name });
+
+
+        if (!monster) {
+            return res.status(404).json({ message: "Monster not found" });
+        }
+
+
+        res.status(200).json(monster);
+    } catch (e) {
+        console.error(e);
+        res.status(500).json({ message: "Server error" });
     }
 });
 
