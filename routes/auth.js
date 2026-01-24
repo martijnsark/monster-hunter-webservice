@@ -5,7 +5,7 @@ const router = express.Router();
 
 //CORS middleware for all auth routes
 router.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:5173'); // your frontend URL
+    res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     res.header('Access-Control-Allow-Methods', 'POST, OPTIONS');
     next();
