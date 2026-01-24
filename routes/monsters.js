@@ -35,6 +35,7 @@ router.options('/named/:name', (req, res) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, OPTIONS'); 
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    //204 no content
     res.sendStatus(204);
 });
 
